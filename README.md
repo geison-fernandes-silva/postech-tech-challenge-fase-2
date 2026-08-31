@@ -86,7 +86,7 @@ uv run dvc dag
 
 ## Container Docker
 
-O container executa o mesmo pipeline DVC e nao inclui dados, modelos ou experimentos locais na imagem.
+O container executa o mesmo pipeline DVC e nao inclui dados, modelos ou experimentos locais na imagem. Como o historico Git tambem fica fora da imagem, o DVC e inicializado internamente no modo isolado apenas durante a execucao do container.
 
 ```bash
 docker build -t purchase-propensity-mlops .

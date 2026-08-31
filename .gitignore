@@ -12,3 +12,4 @@ data/raw/*.csv
 data/processed/*.csv
 models/*.joblib
 reports/*.json
+local-artifacts/

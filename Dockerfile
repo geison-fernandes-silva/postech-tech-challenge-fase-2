@@ -15,4 +15,4 @@ COPY .dvcignore ./
 
 RUN pip install --no-cache-dir uv && uv sync --frozen --no-dev
 
-CMD ["uv", "run", "dvc", "repro"]
+CMD ["sh", "-c", "uv run --no-sync dvc init --no-scm --force && uv run --no-sync dvc repro"]
