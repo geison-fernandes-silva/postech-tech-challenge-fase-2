@@ -1,0 +1,32 @@
+stages:
+  download:
+    cmd: uv run download-data --output data/raw/online_shoppers_intention.csv
+    deps:
+      - src/purchase_propensity/download_data.py
+    params:
+      - params.yaml:
+          - base.random_seed
+    outs:
+      - data/raw/online_shoppers_intention.csv
+  preprocess:
+    cmd: uv run preprocess-data --input data/raw/online_shoppers_intention.csv --output data/processed/online_shoppers_prepared.csv
+    deps:
+      - data/raw/online_shoppers_intention.csv
+      - src/purchase_propensity/preprocess.py
+    outs:
+      - data/processed/online_shoppers_prepared.csv
+  train:
+    cmd: uv run train-model --input data/processed/online_shoppers_prepared.csv --model-output models/best_model.joblib --metrics-output reports/metrics.json
+    deps:
+      - data/processed/online_shoppers_prepared.csv
+      - src/purchase_propensity/config.py
+      - src/purchase_propensity/train.py
+    params:
+      - params.yaml:
+          - base
+          - model
+    outs:
+      - models/best_model.joblib
+    metrics:
+      - reports/metrics.json:
+          cache: false

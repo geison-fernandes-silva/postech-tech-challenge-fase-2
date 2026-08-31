@@ -1,0 +1,73 @@
+schema: '2.0'
+stages:
+  download:
+    cmd: uv run download-data --output data/raw/online_shoppers_intention.csv
+    deps:
+    - path: src/purchase_propensity/download_data.py
+      hash: md5
+      md5: 0f96cc0de55fd2a6d15b100fc59864a5
+      size: 3187
+    params:
+      params.yaml:
+        base.random_seed: 42
+    outs:
+    - path: data/raw/online_shoppers_intention.csv
+      hash: md5
+      md5: cc6ec1db03b4f10f8de52c56ff48b085
+      size: 1072063
+  preprocess:
+    cmd: uv run preprocess-data --input data/raw/online_shoppers_intention.csv 
+      --output data/processed/online_shoppers_prepared.csv
+    deps:
+    - path: data/raw/online_shoppers_intention.csv
+      hash: md5
+      md5: cc6ec1db03b4f10f8de52c56ff48b085
+      size: 1072063
+    - path: src/purchase_propensity/preprocess.py
+      hash: md5
+      md5: 0a938e684a7858bed81707cf9f29f16c
+      size: 1255
+    outs:
+    - path: data/processed/online_shoppers_prepared.csv
+      hash: md5
+      md5: 582cd7ca08e4fd11d993c2d99828db2d
+      size: 1100576
+  train:
+    cmd: uv run train-model --input data/processed/online_shoppers_prepared.csv 
+      --model-output models/best_model.joblib --metrics-output 
+      reports/metrics.json
+    deps:
+    - path: data/processed/online_shoppers_prepared.csv
+      hash: md5
+      md5: 582cd7ca08e4fd11d993c2d99828db2d
+      size: 1100576
+    - path: src/purchase_propensity/config.py
+      hash: md5
+      md5: d3a21a6b3add773a389f35e5e5b55f23
+      size: 970
+    - path: src/purchase_propensity/train.py
+      hash: md5
+      md5: 0bfe659fc64f75e3311d2d48adb727a9
+      size: 5750
+    params:
+      params.yaml:
+        base:
+          random_seed: 42
+          test_size: 0.2
+        model:
+          logistic_regression:
+            C: 1.0
+            max_iter: 1000
+          random_forest:
+            n_estimators: 250
+            max_depth: 12
+            min_samples_leaf: 3
+    outs:
+    - path: models/best_model.joblib
+      hash: md5
+      md5: 3b9bf33ef962a24df0e73e8755f4f988
+      size: 14121211
+    - path: reports/metrics.json
+      hash: md5
+      md5: 99698383a2127081f4ad848e078e0976
+      size: 230
