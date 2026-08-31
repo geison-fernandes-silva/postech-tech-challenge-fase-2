@@ -15,4 +15,6 @@ COPY .dvcignore ./
 
 RUN pip install --no-cache-dir uv && uv sync --frozen --no-dev
 
+EXPOSE 8080
+
 CMD ["sh", "-c", "uv run --no-sync dvc init --no-scm --force && uv run --no-sync dvc repro"]

@@ -95,6 +95,19 @@ docker run --rm -v "$(pwd)/artifacts:/app/artifacts" purchase-propensity-mlops
 
 Para manter os artefatos fora do container, prefira executar o pipeline localmente ou monte os diretorios `data`, `models`, `reports` e `mlruns` como volumes conforme a necessidade do ambiente.
 
+## Tela de demonstracao comercial
+
+Depois do treinamento, uma tela web permite testar a propensao de compra com sinais simplificados de um visitante e receber uma prioridade comercial e acao sugerida.
+
+```bash
+podman run --rm -p 18080:8080 \\
+  -v "$(pwd)/local-artifacts/models:/app/models" \\
+  purchase-propensity-mlops:local \\
+  uv run --no-sync serve-demo
+```
+
+Abra `http://127.0.0.1:18080`. O mesmo comando pode ser executado com `docker run` em um ambiente com Docker ativo.
+
 ## Configuracao
 
 Copie `.env.example` para `.env` antes de executar. Para este projeto, o MLflow usa SQLite local por padrao. Em ambiente corporativo, `MLFLOW_TRACKING_URI` pode apontar para um servidor MLflow centralizado.
