@@ -1,0 +1,45 @@
+[project]
+name = "purchase-propensity-mlops"
+version = "0.1.0"
+description = "Reproducible MLOps pipeline for e-commerce purchase propensity classification."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+  "dvc>=3.60,<4",
+  "joblib>=1.4,<2",
+  "mlflow>=2.17,<3",
+  "numpy>=1.26,<3",
+  "pandas>=2.2,<3",
+  "python-dotenv>=1.0,<2",
+  "pyyaml>=6.0,<7",
+  "scikit-learn>=1.5,<2",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3,<9",
+  "ruff>=0.8,<1",
+]
+
+[project.scripts]
+download-data = "purchase_propensity.download_data:main"
+preprocess-data = "purchase_propensity.preprocess:main"
+train-model = "purchase_propensity.train:main"
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/purchase_propensity"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
